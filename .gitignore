@@ -1,3 +1,8 @@
+# package specific
+
+Pipfile*
+scripts/build.sh
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
