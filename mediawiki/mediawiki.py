@@ -836,8 +836,7 @@ class MediaWiki(object):
                 temp_title = self.suggest(title)
                 if temp_title is None:  # page doesn't exist
                     raise PageError(title=title)
-                else:
-                    title = temp_title
+                title = temp_title
             return MediaWikiPage(self, title, redirect=redirect, preload=preload)
         else:  # must be pageid
             return MediaWikiPage(self, pageid=pageid, preload=preload)
@@ -926,8 +925,7 @@ class MediaWiki(object):
                 raise HTTPTimeoutError(query)
             elif err in geo_error:
                 raise MediaWikiGeoCoordError(err)
-            else:
-                raise MediaWikiException(err)
+            raise MediaWikiException(err)
 
     @staticmethod
     def _check_query(value, message):
