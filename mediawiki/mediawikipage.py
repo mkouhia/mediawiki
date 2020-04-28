@@ -125,7 +125,7 @@ class MediaWikiPage(object):
             return False
 
     # Properties
-    def _pull_content_revision_parent(self):
+    def _pull_revision_parent(self):
         """ combine the pulling of these three properties """
 
         if self._revision_id is None:
@@ -144,14 +144,20 @@ class MediaWikiPage(object):
 
     @property
     def content(self):
-        """ str: The page content in text format
+        """ str: The page content in wikitext format
 
             Note:
-                Not settable
-            Note:
-                Side effect is to also get revision_id and parent_id """
-        if self._content is None:
-            self._pull_content_revision_parent()
+                Not settable """
+        self._content = None
+        query_params = {
+            "prop": "revisions",
+            "rvprop": "content",
+            "rvlimit": 1,
+            "titles": self.title,
+        }
+        request = self.mediawiki.wiki_request(query_params)
+        page = request["query"]["pages"][self.pageid]
+        self._content = page["revisions"][0]["*"]
         return self._content
 
     @property
@@ -163,7 +169,7 @@ class MediaWikiPage(object):
             Note:
                 Side effect is to also get content and parent_id """
         if self._revision_id is None:
-            self._pull_content_revision_parent()
+            self._pull_revision_parent()
         return self._revision_id
 
     @property
@@ -175,7 +181,7 @@ class MediaWikiPage(object):
             Note:
                 Side effect is to also get content and revision_id """
         if self._parent_id is None:
-            self._pull_content_revision_parent()
+            self._pull_revision_parent()
         return self._parent_id
 
     @property
