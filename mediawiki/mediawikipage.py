@@ -453,7 +453,7 @@ class MediaWikiPage(object):
                 Side effect is to also pull the content which can be slow
             Note:
                 This is a parsing operation and not part of the standard API"""
-        section = "== {0} ==".format(section_title)
+        section = "=={0}==".format(section_title)
         try:
             content = self.content
             index = content.index(section) + len(section)
@@ -691,7 +691,7 @@ class MediaWikiPage(object):
             tmp[sec] = OrderedDict()
 
         self._sections = list()
-        section_regexp = r"\n==* .* ==*\n"  # '== {STUFF_NOT_\n} =='
+        section_regexp = r"\n==*.*==*\n"  # '== {STUFF_NOT_\n} =='
         found_obj = re.findall(section_regexp, self.content)
 
         res = OrderedDict()
@@ -701,7 +701,7 @@ class MediaWikiPage(object):
             depth = obj.count("=") / 2  # this gets us to the single side...
             depth -= 2  # now, we can calculate depth
 
-            sec = obj.lstrip("\n= ").rstrip(" =\n")
+            sec = obj.lstrip("\n=").rstrip("=\n")
             if depth == 0:
                 last_depth = 0
                 path = [sec]
